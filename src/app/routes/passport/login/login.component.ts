@@ -1,12 +1,18 @@
+import { AuthService, ConfigState, Profile, ProfileStateService, SetRemember } from '@abp/ng.core';
+import { Store } from '@ngxs/store';
+import { throwError } from 'rxjs';
+import { catchError, finalize } from 'rxjs/operators';
+import snq from 'snq';
+
 import { Component, Inject, OnDestroy, Optional } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { StartupService } from '@core';
 import { ReuseTabService } from '@delon/abc/reuse-tab';
 import { DA_SERVICE_TOKEN, ITokenService, SocialOpenType, SocialService } from '@delon/auth';
-import { SettingsService, _HttpClient } from '@delon/theme';
+import { SettingsService, User, _HttpClient } from '@delon/theme';
 import { environment } from '@env/environment';
-import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzMessageDataOptions, NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 
 @Component({
@@ -29,6 +35,9 @@ export class UserLoginComponent implements OnDestroy {
     private startupSrv: StartupService,
     public http: _HttpClient,
     public msg: NzMessageService,
+    private authService: AuthService,
+    private store: Store,
+    private profileService: ProfileStateService,
   ) {
     this.form = fb.group({
       userName: [null, [Validators.required, Validators.minLength(4)]],
@@ -64,6 +73,8 @@ export class UserLoginComponent implements OnDestroy {
   interval$: any;
 
   // #endregion
+
+  inProgress = false;
 
   switch(ret: any) {
     this.type = ret.index;
@@ -106,30 +117,26 @@ export class UserLoginComponent implements OnDestroy {
       }
     }
 
-    // 默认配置中对所有HTTP请求都会强制 [校验](https://ng-alain.com/auth/getting-started) 用户 Token
-    // 然一般来说登录请求不需要校验，因此可以在请求URL加上：`/login?_allow_anonymous=true` 表示不触发用户 Token 校验
-    this.http
-      .post('/login/account?_allow_anonymous=true', {
-        type: this.type,
-        userName: this.userName.value,
-        password: this.password.value,
-      })
-      .subscribe((res: any) => {
-        if (res.msg !== 'ok') {
-          this.error = res.msg;
-          return;
-        }
-        // 清空路由复用信息
-        this.reuseTabService.clear();
-        // 设置用户Token信息
-        this.tokenService.set(res.user);
-        // 重新获取 StartupService 内容，我们始终认为应用信息一般都会受当前用户授权范围而影响
-        this.startupSrv.load().then(() => {
-          let url = this.tokenService.referrer.url || '/';
-          if (url.includes('/passport')) {
-            url = '/';
-          }
-          this.router.navigateByUrl(url);
+    // 对接ABP后台的验证
+    this.authService
+      .login(this.form.get('userName').value, this.form.get('password').value)
+      .pipe(
+        catchError((err) => {
+          this.msg.error(snq(() => err.error.error_description) || snq(() => err.error.error.message, 'AbpAccount::DefaultErrorMessage'), {
+            nzDuration: 7000,
+          } as NzMessageDataOptions);
+
+          return throwError(err);
+        }),
+        finalize(() => (this.inProgress = false)),
+      )
+      .subscribe(() => {
+        console.log('Login successfully!');
+        // fetch profile information
+        this.profileService.dispatchGetProfile().subscribe((resp) => {
+          console.log('Todo populate profile in app settings.');
+          const response = this.profileService.getProfile() as Profile.Response;
+          this.settingsService.setUser({ name: response.name, email: response.email } as User);
         });
       });
   }

@@ -39,6 +39,8 @@
     "@delon/mock": "^9.0.0-rc.1",
     "@delon/theme": "^9.0.0-rc.1",
     "@delon/util": "^9.0.0-rc.1",
+    "@ngx-translate/core": "^12.1.2",
+    "@ngx-translate/http-loader": "^4.0.0",
     "@ngxs/router-plugin": "^3.6.2",
     "@ngxs/storage-plugin": "^3.6.2",
     "@ngxs/store": "^3.6.2",

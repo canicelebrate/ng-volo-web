@@ -28,6 +28,29 @@ const LANG_PROVIDES = [
 ];
 // #endregion
 
+// #region i18n services
+import { I18NService } from '@core/i18n/i18n.service';
+import { ALAIN_I18N_TOKEN } from '@delon/theme';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+
+export function I18nHttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http, `assets/tmp/i18n/`, '.json');
+}
+
+const I18NSERVICE_MODULES = [
+  TranslateModule.forRoot({
+    loader: {
+      provide: TranslateLoader,
+      useFactory: I18nHttpLoaderFactory,
+      deps: [HttpClient],
+    },
+  }),
+];
+
+const I18NSERVICE_PROVIDES = [{ provide: ALAIN_I18N_TOKEN, useClass: I18NService, multi: false }];
+// #region
+
 // #region JSON Schema form (using @delon/form)
 import { JsonSchemaModule } from '@shared';
 const FORM_MODULES = [JsonSchemaModule];
@@ -95,10 +118,11 @@ import { SharedModule } from './shared/shared.module';
     SharedModule,
     LayoutModule,
     RoutesModule,
+    ...I18NSERVICE_MODULES,
     ...FORM_MODULES,
     ...GLOBAL_THIRD_MODULES,
   ],
-  providers: [...LANG_PROVIDES, ...INTERCEPTOR_PROVIDES, ...APPINIT_PROVIDES],
+  providers: [...LANG_PROVIDES, ...I18NSERVICE_PROVIDES, ...INTERCEPTOR_PROVIDES, ...APPINIT_PROVIDES],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

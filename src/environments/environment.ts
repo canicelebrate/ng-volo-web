@@ -17,9 +17,9 @@ export const environment = {
   },
   oAuthConfig: {
     issuer: 'https://localhost:44327',
-    clientId: 'znext_App',
+    clientId: 'BookStore_App',
     dummyClientSecret: '1q2w3e*',
-    scope: 'znext',
+    scope: 'BookStore',
     showDebugInformation: true,
     oidc: false,
     requireHttps: true,

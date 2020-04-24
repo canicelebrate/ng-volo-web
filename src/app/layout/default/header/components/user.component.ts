@@ -1,17 +1,18 @@
+import { AuthService } from '@abp/ng.core';
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { DA_SERVICE_TOKEN, ITokenService } from '@delon/auth';
 import { SettingsService } from '@delon/theme';
+import { Navigate, RouterState } from '@ngxs/router-plugin';
+import { Store } from '@ngxs/store';
+import { throwError } from 'rxjs';
+import { catchError, finalize } from 'rxjs/operators';
+import snq from 'snq';
 
 @Component({
   selector: 'header-user',
   template: `
-    <div
-      class="alain-default__nav-item d-flex align-items-center px-sm"
-      nz-dropdown
-      nzPlacement="bottomRight"
-      [nzDropdownMenu]="userMenu"
-    >
+    <div class="alain-default__nav-item d-flex align-items-center px-sm" nz-dropdown nzPlacement="bottomRight" [nzDropdownMenu]="userMenu">
       <nz-avatar [nzSrc]="settings.user.avatar" nzSize="small" class="mr-sm"></nz-avatar>
       {{ settings.user.name }}
     </div>
@@ -44,10 +45,20 @@ export class HeaderUserComponent {
     public settings: SettingsService,
     private router: Router,
     @Inject(DA_SERVICE_TOKEN) private tokenService: ITokenService,
+    private authService: AuthService,
+    private store: Store,
   ) {}
 
   logout() {
-    this.tokenService.clear();
-    this.router.navigateByUrl(this.tokenService.login_url);
+    this.authService.logout().subscribe(() => {
+      this.store.dispatch(
+        new Navigate(['/passport/login'], null, {
+          state: { redirectUrl: this.store.selectSnapshot(RouterState).state.url },
+        }),
+      );
+    });
+
+    // this.tokenService.clear();
+    // this.router.navigateByUrl(this.tokenService.login_url);
   }
 }
