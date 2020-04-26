@@ -49,6 +49,11 @@ const routes: Routes = [
       { path: 'lock', component: UserLockComponent, data: { title: '锁屏', titleI18n: 'lock' } },
     ],
   },
+  {
+    path: 'app',
+    component: LayoutDefaultComponent,
+    children: [{ path: 'users', loadChildren: () => import('../users/users.module').then((m) => m.UsersModule) }],
+  },
   // 单页不包裹Layout
   { path: 'callback/:type', component: CallbackComponent },
   { path: '**', redirectTo: 'exception/404' },

@@ -1,4 +1,8 @@
+import { ExpandOperator } from 'rxjs/internal/operators/expand';
+
 // Components
+export * from './app-component-base';
+export * from './paged-listing-component-base';
 
 // Utils
 export * from './utils/yuan';

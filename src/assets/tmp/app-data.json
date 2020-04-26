@@ -43,6 +43,12 @@
           ]
         },
         {
+          "text": "用户",
+          "link": "/app/users",
+          "icon": "anticon-user",
+          "i18n": "menu.users"
+        },
+        {
           "text": "快捷菜单",
           "i18n": "menu.shortcut",
           "icon": "anticon-rocket",

@@ -20,8 +20,9 @@
   },
   "private": true,
   "dependencies": {
-    "@abp/ng.core": "^2.6.0",
-    "@abp/ng.theme.shared": "^2.6.0",
+    "@abp/ng.core": "^2.6.2",
+    "@abp/ng.theme.shared": "^2.6.2",
+    "@abp/ng.identity":"^2.6.2",
     "@angular/animations": "~9.1.1",
     "@angular/common": "~9.1.1",
     "@angular/compiler": "~9.1.1",
