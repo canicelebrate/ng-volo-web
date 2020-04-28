@@ -132,12 +132,6 @@ export class UserLoginComponent implements OnDestroy {
       )
       .subscribe(() => {
         console.log('Login successfully!');
-        // fetch profile information
-        this.profileService.dispatchGetProfile().subscribe((resp) => {
-          console.log('Todo populate profile in app settings.');
-          const response = this.profileService.getProfile() as Profile.Response;
-          this.settingsService.setUser({ name: response.name, email: response.email } as User);
-        });
       });
   }
 

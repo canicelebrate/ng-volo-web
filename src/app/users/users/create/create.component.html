@@ -1,0 +1,16 @@
+<div class="modal-header">
+  <div class="modal-title">创建用户</div>
+</div>
+<nz-spin *ngIf="!i" class="modal-spin"></nz-spin>
+<nz-tabset *ngIf="i">
+  <nz-tab nzTitle="基础信息">
+    <sf #sf mode="edit" [schema]="schema" [ui]="ui" [formData]="i" button="none"> </sf>
+  </nz-tab>
+  <nz-tab nzTitle="角色">
+    <sf #sfRoles mode="edit" [schema]="rolesSchema" [formData]="i" button="none"> </sf>
+  </nz-tab>
+</nz-tabset>
+<div *ngIf="i" class="modal-footer">
+  <button nz-button type="button" (click)="close()">关闭</button>
+  <button nz-button type="submit" nzType="primary" (click)="save()" [disabled]="!valid" [nzLoading]="saving">保存</button>
+</div>

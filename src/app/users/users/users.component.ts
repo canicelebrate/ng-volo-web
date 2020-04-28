@@ -11,13 +11,15 @@ import { Select, Store } from '@ngxs/store';
 import { Observable, zip } from 'rxjs';
 import { finalize, pluck, switchMap, take } from 'rxjs/operators';
 import snq from 'snq';
+import { UsersCreateComponent } from './create/create.component';
 
 @Component({
   selector: 'app-users-users',
   templateUrl: './users.component.html',
 })
 export class UsersComponent extends PagedListingComponentBase<ABP.BasicItem> implements OnInit {
-  data: Identity.UserItem[];
+  @Select(IdentityState.getUsers)
+  data$: Observable<Identity.UserItem[]>;
 
   @Select(IdentityState.getUsersTotalCount)
   totalCount$: Observable<number>;
@@ -38,7 +40,7 @@ export class UsersComponent extends PagedListingComponentBase<ABP.BasicItem> imp
     { title: '用户名', index: 'userName' },
     { title: '全名', index: 'name' },
     { title: '邮件', width: '50px', index: 'email' },
-    { title: '激活状态', type: 'yn', index: '!isDeleted' },
+    { title: '激活状态', type: 'yn', index: 'isDeleted', yn: { truth: false } },
     {
       title: '操作',
       buttons: [
@@ -86,9 +88,11 @@ export class UsersComponent extends PagedListingComponentBase<ABP.BasicItem> imp
   }
 
   add() {
-    // this.modal
-    //   .createStatic(FormEditComponent, { i: { id: 0 } })
-    //   .subscribe(() => this.st.reload());
+    this.modal.createStatic(UsersCreateComponent, { i: { id: 0 } }).subscribe((m) => {
+      if (m === true) {
+        this.st.reload();
+      }
+    });
   }
 
   protected getReq(): ABP.PageQueryParams {
@@ -104,11 +108,11 @@ export class UsersComponent extends PagedListingComponentBase<ABP.BasicItem> imp
         }),
       )
       .subscribe((result: any) => {
-        this.data = this.identityStateService.getUsers();
+        // this.data = this.identityStateService.getUsers();
 
-        zip(this.totalCount$).subscribe(([totalCount]) => {
+        zip(this.data$, this.totalCount$).subscribe(([data, totalCount]) => {
           // this.users = result.items;
-          this.showPaging(this.data, totalCount, pageNumber);
+          this.showPaging(data, totalCount, pageNumber);
         });
       });
   }

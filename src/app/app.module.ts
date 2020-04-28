@@ -70,7 +70,7 @@ const INTERCEPTOR_PROVIDES = [
 import { environment } from '../environments/environment';
 
 import { CoreModule as abpCoreModule } from '@abp/ng.core';
-import { ThemeSharedModule } from '@abp/ng.theme.shared';
+import { /*ErrorHandler,*/ ThemeSharedModule } from '@abp/ng.theme.shared';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { NgxsModule } from '@ngxs/store';
 
@@ -83,6 +83,10 @@ const GLOBAL_THIRD_MODULES = [
   ThemeSharedModule.forRoot(),
   NgxsModule.forRoot(),
 ];
+
+import { AEErrorHandler } from './shared/handlers/aeerror-handler.service';
+
+// const GLOBAL_THIRD_PROVIDES = [{ provide: ErrorHandler, useClass: AEErrorHandler }];
 // #endregion
 
 // #region Startup Service

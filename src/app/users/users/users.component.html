@@ -5,5 +5,5 @@
 </page-header>
 <nz-card>
   <sf mode="search" [schema]="searchSchema" (formSubmit)="doSearch($event)" (formReset)="st.reset($event)"></sf>
-  <st #st [data]="data" [columns]="columns" [pi]="pageNumber" [ps]="pageSize" [total]="totalItems" (change)="change($event)"></st>
+  <st #st [data]="data$ | async" [columns]="columns" [pi]="pageNumber" [ps]="pageSize" [total]="totalItems" (change)="change($event)"></st>
 </nz-card>

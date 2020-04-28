@@ -2,8 +2,8 @@
   <div nz-dropdown nzTrigger="click" [nzDropdownMenu]="userMenu" class="alain-default__aside-user">
     <nz-avatar class="alain-default__aside-user-avatar" [nzSrc]="settings.user.avatar"></nz-avatar>
     <div class="alain-default__aside-user-info">
-      <strong>{{ settings.user.name }}</strong>
-      <p class="mb0">{{ settings.user.email }}</p>
+      <strong>{{ (profile$ | async)?.name }}</strong>
+      <p class="mb0">{{ (profile$ | async)?.email }}</p>
     </div>
   </div>
   <nz-dropdown-menu #userMenu="nzDropdownMenu">
