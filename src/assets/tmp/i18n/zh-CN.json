@@ -152,5 +152,7 @@
   "validation.username.required":"请输入用户名！",
   "menu.tenants":"租户管理",
   "menu.users":"用户管理",
-  "menu.roles":"角色管理"
+  "menu.roles":"角色管理",
+  "mobile number":"手机号码",
+  "home":"主页"
 }

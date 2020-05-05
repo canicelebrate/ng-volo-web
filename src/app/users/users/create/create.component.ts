@@ -1,19 +1,24 @@
-import { CreateUser, Identity, IdentityStateService } from '@abp/ng.identity';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { SFComponent, SFSchema, SFUISchema } from '@delon/form';
 import { _HttpClient } from '@delon/theme';
-import { Store } from '@ngxs/store';
+import { CreateUser, Identity, IdentityState, IdentityStateService } from '@identity';
+import { Select, Store } from '@ngxs/store';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalRef } from 'ng-zorro-antd/modal';
+import { Observable } from 'rxjs';
 import { finalize, pluck, switchMap, take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-users-create',
   templateUrl: './create.component.html',
 })
-export class UsersCreateComponent implements OnInit {
+export class UsersCreateComponent implements OnInit, AfterViewInit {
   @ViewChild('sf', { static: false }) sf: SFComponent;
   @ViewChild('sfRoles', { static: false }) sfRoles: SFComponent;
+
+  @Select(IdentityState.getRoles)
+  data$: Observable<Identity.RoleItem[]>;
+
   record: any = {};
   i: any = {};
   saving = false;
@@ -66,10 +71,18 @@ export class UsersCreateComponent implements OnInit {
     private identityStateService: IdentityStateService,
   ) {}
 
-  ngOnInit(): void {
-    // if (this.record.id > 0) {
-    //   this.http.get(`/user/${this.record.id}`).subscribe((res) => (this.i = res));
-    // }
+  ngOnInit(): void {}
+
+  ngAfterViewInit(): void {
+    this.data$.subscribe((roles: Identity.RoleItem[]) => {
+      this.rolesSchema.properties.roleNames.enum = [];
+      roles.forEach((v, i, arr) => {
+        this.rolesSchema.properties.roleNames.enum.push({ title: v.name, value: v.name });
+      });
+      this.sfRoles.refreshSchema();
+    });
+
+    this.identityStateService.dispatchGetRoles();
   }
 
   save() {

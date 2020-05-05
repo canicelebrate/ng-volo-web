@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { DelonACLModule } from '@delon/acl';
@@ -8,11 +8,11 @@ import { AlainThemeModule } from '@delon/theme';
 
 // import { AppComponentBase } from './app-component-base';
 // import { PagedListingComponentBase } from './paged-listing-component-base';
+// #region third libs
+import { noop } from '@abp/ng.core';
+import { AEErrorHandler } from './handlers/aeerror-handler.service';
 import { SHARED_DELON_MODULES } from './shared-delon.module';
 import { SHARED_ZORRO_MODULES } from './shared-zorro.module';
-
-// #region third libs
-
 const THIRDMODULES = [];
 
 // #endregion
@@ -47,6 +47,8 @@ const DIRECTIVES = [];
     ...COMPONENTS,
     ...DIRECTIVES,
   ],
+  providers: [{ provide: APP_INITIALIZER, deps: [AEErrorHandler], useFactory: noop, multi: true }],
+  // providers: [{ provide: AEErrorHandler, useClass: AEErrorHandler, multi: false }],
   exports: [
     CommonModule,
     FormsModule,

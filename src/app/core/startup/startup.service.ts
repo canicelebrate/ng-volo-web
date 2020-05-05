@@ -15,7 +15,7 @@ import { ICONS } from '../../../style-icons';
 import { ICONS_AUTO } from '../../../style-icons-auto';
 
 // vNext Begin
-import { ProfileStateService } from '@abp/ng.core';
+import { ConfigStateService, ProfileStateService, SessionStateService } from '@abp/ng.core';
 // vNext End
 
 /**
@@ -36,23 +36,32 @@ export class StartupService {
     private httpClient: HttpClient,
     private injector: Injector,
     private profileService: ProfileStateService,
+    private sessionService: SessionStateService,
+    private configStateService: ConfigStateService,
   ) {
     iconSrv.addIcon(...ICONS_AUTO, ...ICONS);
   }
 
   private viaHttp(resolve: any, reject: any) {
-    zip(this.httpClient.get(`assets/tmp/i18n/${this.i18n.defaultLang}.json`), this.httpClient.get('assets/tmp/app-data.json'))
+    zip(
+      this.httpClient.get(`assets/tmp/i18n/${this.i18n.defaultLang}.json`),
+      this.httpClient.get('assets/tmp/app-data.json'),
+      this.configStateService.dispatchGetAppConfiguration(),
+    )
       .pipe(
-        catchError(([langData, appData]) => {
+        catchError(([langData, appData, abpAppData]) => {
           resolve(null);
-          return [langData, appData];
+          return [langData, appData, abpAppData];
         }),
       )
       .subscribe(
-        ([langData, appData]) => {
+        ([langData, appData, _]) => {
           // Setting language data
           this.translate.setTranslation(this.i18n.defaultLang, langData);
           this.translate.setDefaultLang(this.i18n.defaultLang);
+
+          // zorro, delon library setup localization
+          this.i18n.use(this.i18n.defaultLang);
 
           // Application data
           const res: any = appData;

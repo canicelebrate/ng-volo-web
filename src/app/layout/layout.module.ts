@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { SharedModule } from '@shared';
 
 import { LayoutDefaultComponent } from './default/default.component';
@@ -18,13 +19,7 @@ import { SettingDrawerComponent } from './default/setting-drawer/setting-drawer.
 
 const SETTINGDRAWER = [SettingDrawerComponent, SettingDrawerItemComponent];
 
-const COMPONENTS = [
-  LayoutDefaultComponent,
-  LayoutFullScreenComponent,
-  HeaderComponent,
-  SidebarComponent,
-  ...SETTINGDRAWER
-];
+const COMPONENTS = [LayoutDefaultComponent, LayoutFullScreenComponent, HeaderComponent, SidebarComponent, ...SETTINGDRAWER];
 
 const HEADERCOMPONENTS = [
   HeaderSearchComponent,
@@ -33,26 +28,18 @@ const HEADERCOMPONENTS = [
   HeaderIconComponent,
   HeaderFullScreenComponent,
   HeaderStorageComponent,
-  HeaderUserComponent
+  HeaderUserComponent,
 ];
 
 // passport
+import { AccountLanguagesComponent } from './passport/account-languages/account-languages.component';
 import { LayoutPassportComponent } from './passport/passport.component';
-const PASSPORT = [
-  LayoutPassportComponent
-];
+const PASSPORT = [LayoutPassportComponent];
 
 @NgModule({
-  imports: [SharedModule],
+  imports: [SharedModule, TranslateModule.forChild()],
   entryComponents: SETTINGDRAWER,
-  declarations: [
-    ...COMPONENTS,
-    ...HEADERCOMPONENTS,
-    ...PASSPORT
-  ],
-  exports: [
-    ...COMPONENTS,
-    ...PASSPORT
-  ]
+  declarations: [...COMPONENTS, ...HEADERCOMPONENTS, ...PASSPORT, AccountLanguagesComponent],
+  exports: [...COMPONENTS, ...PASSPORT],
 })
-export class LayoutModule { }
+export class LayoutModule {}

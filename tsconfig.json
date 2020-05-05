@@ -22,6 +22,9 @@
       "@shared/*": [
         "src/app/shared/"
       ],
+      "@identity":[
+        "src/app/identity/index"
+      ],
       "@core": [
         "src/app/core/index"
       ],

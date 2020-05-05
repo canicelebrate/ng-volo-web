@@ -1,6 +1,6 @@
 // tslint:disable: no-duplicate-imports
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { APP_INITIALIZER, Injector, LOCALE_ID, NgModule } from '@angular/core';
+import { APP_INITIALIZER, InjectionToken, Injector, LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -70,9 +70,11 @@ const INTERCEPTOR_PROVIDES = [
 import { environment } from '../environments/environment';
 
 import { CoreModule as abpCoreModule } from '@abp/ng.core';
-import { /*ErrorHandler,*/ ThemeSharedModule } from '@abp/ng.theme.shared';
+// import { HttpErrorConfig, ThemeSharedModule } from '@abp/ng.theme.shared';
+// import { ErrorHandler } from '@abp/ng.theme.shared/lib/handlers/error.handler';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { NgxsModule } from '@ngxs/store';
+import { IdentityModule } from './identity/identity.module';
 
 const LOGGERS = [NgxsLoggerPluginModule.forRoot({ disabled: false })];
 
@@ -80,13 +82,38 @@ const GLOBAL_THIRD_MODULES = [
   abpCoreModule.forRoot({
     environment,
   }),
-  ThemeSharedModule.forRoot(),
+  IdentityModule,
+  // ThemeSharedModule,
   NgxsModule.forRoot(),
 ];
 
 import { AEErrorHandler } from './shared/handlers/aeerror-handler.service';
 
-// const GLOBAL_THIRD_PROVIDES = [{ provide: ErrorHandler, useClass: AEErrorHandler }];
+const GLOBAL_THIRD_PROVIDES = [{ provide: AEErrorHandler }];
+
+// export function httpErrorConfigFactory(config = {} as HttpErrorConfig) {
+//   if (config.errorScreen && config.errorScreen.component && !config.errorScreen.forWhichErrors) {
+//     config.errorScreen.forWhichErrors = [401, 403, 404, 500];
+//   }
+
+//   return {
+//     skipHandledErrorCodes: [],
+//     errorScreen: {},
+//     ...config,
+//   } as HttpErrorConfig;
+// }
+
+// export const HTTP_ERROR_CONFIG = new InjectionToken('HTTP_ERROR_CONFIG');
+
+// const GLOBAL_THIRD_PROVIDERS = [
+//   { provide: HTTP_ERROR_CONFIG, useValue: {} as HttpErrorConfig },
+//   {
+//     provide: 'HTTP_ERROR_CONFIG',
+//     useFactory: httpErrorConfigFactory,
+//     deps: [HTTP_ERROR_CONFIG],
+//   },
+// ];
+
 // #endregion
 
 // #region Startup Service
@@ -127,7 +154,14 @@ import { SharedModule } from './shared/shared.module';
     ...FORM_MODULES,
     ...GLOBAL_THIRD_MODULES,
   ],
-  providers: [...LANG_PROVIDES, ...I18NSERVICE_PROVIDES, ...INTERCEPTOR_PROVIDES, ...APPINIT_PROVIDES],
+  providers: [
+    ...GLOBAL_THIRD_PROVIDES,
+    ...LANG_PROVIDES,
+    ...I18NSERVICE_PROVIDES,
+    ...INTERCEPTOR_PROVIDES,
+    ...APPINIT_PROVIDES,
+    ...GLOBAL_THIRD_PROVIDES,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

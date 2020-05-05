@@ -1,8 +1,10 @@
 // 请参考：https://ng-alain.com/docs/i18n
+import { SessionStateService } from '@abp/ng.core';
 import { registerLocaleData } from '@angular/common';
 import ngEn from '@angular/common/locales/en';
 import ngZh from '@angular/common/locales/zh';
 import ngZhTw from '@angular/common/locales/zh-Hant';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Injectable } from '@angular/core';
 import {
   AlainI18NService,
@@ -25,9 +27,12 @@ interface LangData {
   date: any;
   delon: any;
   abbr: string;
+  culture: string;
 }
 
 const DEFAULT = 'zh-CN';
+const DEFAULT_ABP_CULTURE = 'zh-Hans';
+
 const LANGS: { [key: string]: LangData } = {
   'zh-CN': {
     text: '简体中文',
@@ -36,6 +41,7 @@ const LANGS: { [key: string]: LangData } = {
     date: dfZhCn,
     delon: delonZhCn,
     abbr: '🇨🇳',
+    culture: 'zh-Hans',
   },
   'zh-TW': {
     text: '繁体中文',
@@ -44,6 +50,7 @@ const LANGS: { [key: string]: LangData } = {
     date: dfZhTw,
     delon: delonZhTw,
     abbr: '🇭🇰',
+    culture: 'zh-Hant',
   },
   'en-US': {
     text: 'English',
@@ -52,17 +59,19 @@ const LANGS: { [key: string]: LangData } = {
     date: dfEn,
     delon: delonEnUS,
     abbr: '🇬🇧',
+    culture: 'en',
   },
 };
 
 @Injectable({ providedIn: 'root' })
 export class I18NService implements AlainI18NService {
   private _default = DEFAULT;
+  private _defaultABPCulture = DEFAULT_ABP_CULTURE;
   private change$ = new BehaviorSubject<string | null>(null);
 
   private _langs = Object.keys(LANGS).map((code) => {
     const item = LANGS[code];
-    return { code, text: item.text, abbr: item.abbr };
+    return { code, text: item.text, abbr: item.abbr, culture: item.culture };
   });
 
   constructor(
@@ -70,6 +79,7 @@ export class I18NService implements AlainI18NService {
     private nzI18nService: NzI18nService,
     private delonLocaleService: DelonLocaleService,
     private translate: TranslateService,
+    private sessionStateService: SessionStateService,
   ) {
     // `@ngx-translate/core` 预先知道支持哪些语言
     const lans = this._langs.map((item) => item.code);
@@ -103,6 +113,7 @@ export class I18NService implements AlainI18NService {
     this.updateLangData(lang);
     this.translate.use(lang).subscribe(() => this.change$.next(lang));
   }
+
   /** 获取语言列表 */
   getLangs() {
     return this._langs;
@@ -113,8 +124,40 @@ export class I18NService implements AlainI18NService {
   }
   /** 默认语言 */
   get defaultLang() {
-    return this._default;
+    // 使用ABP的SessionStateService的getLanguage方法来获取当前默认语言
+    const culcture = this.sessionStateService.getLanguage();
+    return this.getLangByABPCulture(culcture);
   }
+
+  /** ABP相关 */
+  useABPCulture(culture: string): void {
+    const lang = this.getLangByABPCulture(culture);
+    this.use(lang);
+
+    this.sessionStateService.dispatchSetLanguage(culture);
+  }
+
+  get defaultABPLangCulture() {
+    for (const lang of this._langs) {
+      if (lang.code === this.defaultLang) {
+        return lang.culture;
+      }
+    }
+    return DEFAULT_ABP_CULTURE;
+  }
+
+  private getLangByABPCulture(culture: string): string {
+    if (culture) {
+      for (const lang of this._langs) {
+        if (lang.culture === culture) {
+          return lang.code;
+        }
+      }
+    }
+
+    return DEFAULT;
+  }
+
   /** 当前语言 */
   get currentLang() {
     return this.translate.currentLang || this.translate.getDefaultLang() || this._default;

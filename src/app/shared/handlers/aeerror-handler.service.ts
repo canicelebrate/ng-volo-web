@@ -18,7 +18,7 @@ import { filter, map } from 'rxjs/operators';
 import snq from 'snq';
 
 import { LocalizationService } from '@abp/ng.core';
-import { /*ErrorHandler*/ ErrorScreenErrorCodes, HttpErrorConfig } from '@abp/ng.theme.shared';
+
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 
 export const DEFAULT_ERROR_MESSAGES = {
@@ -45,30 +45,30 @@ export const DEFAULT_ERROR_MESSAGES = {
 };
 
 @Injectable({ providedIn: 'root' })
-export class AEErrorHandler /*extends ErrorHandler*/ {
+export class AEErrorHandler {
   constructor(
     private actions: Actions,
     private store: Store,
-    private appRef: ApplicationRef,
+    // private confirmationService: ConfirmationService,s
     private cfRes: ComponentFactoryResolver,
     private rendererFactory: RendererFactory2,
     private injector: Injector,
-    @Inject('HTTP_ERROR_CONFIG') private httpErrorConfig: HttpErrorConfig,
+    // @Inject('HTTP_ERROR_CONFIG') private httpErrorConfig: HttpErrorConfig,
     private modal: NzModalService,
     private localizationService: LocalizationService,
   ) {
-    // super(actions, store, appRef, cfRes, rendererFactory, injector, httpErrorConfig);
+    // super(_actions, store, confirmationService, appRef, cfRes, rendererFactory, injector, httpErrorConfig);
 
     this.listenToRestError();
     // this.listenToRouterError();
     this.listenToRouterDataResolved();
   }
 
-  // private listenToRouterError() {
-  //   this.actions.pipe(ofActionSuccessful(RouterError), filter(this.filterRouteErrors)).subscribe(
-  //     () => this.show404Page())
-  //     ;
-  // }
+  private listenToRouterError() {
+    // this.actions.pipe(ofActionSuccessful(RouterError), filter(this.filterRouteErrors)).subscribe(
+    //   () => this.show404Page())
+    //   ;
+  }
 
   private listenToRouterDataResolved() {
     this.actions
@@ -87,7 +87,6 @@ export class AEErrorHandler /*extends ErrorHandler*/ {
       .pipe(
         ofActionSuccessful(RestOccurError),
         map((action) => action.payload),
-        filter(this.filterRestErrors),
       )
       .subscribe((err) => {
         const body = snq(() => err.error.error, DEFAULT_ERROR_MESSAGES.defaultError.title);
@@ -169,26 +168,6 @@ export class AEErrorHandler /*extends ErrorHandler*/ {
       });
   }
 
-  // private show401Page() {
-  //   this.createErrorComponent({
-  //     title: {
-  //       key: 'AbpAccount::401Message',
-  //       defaultValue: DEFAULT_ERROR_MESSAGES.defaultError401.title,
-  //     },
-  //     status: 401,
-  //   });
-  // }
-
-  // private show404Page() {
-  //   this.createErrorComponent({
-  //     title: {
-  //       key: 'AbpAccount::404Message',
-  //       defaultValue: DEFAULT_ERROR_MESSAGES.defaultError404.title,
-  //     },
-  //     status: 404,
-  //   });
-  // }
-
   private showError(message?: Config.LocalizationParam, title?: Config.LocalizationParam, body?: any): Observable<boolean> {
     if (body) {
       if (body.details) {
@@ -221,54 +200,6 @@ export class AEErrorHandler /*extends ErrorHandler*/ {
       new Navigate(['/passport/login'], null, {
         state: { redirectUrl: this.store.selectSnapshot(RouterState.url) },
       }),
-    );
-  }
-
-  // createErrorComponent(instance: Partial<HttpErrorWrapperComponent>) {
-  // const renderer = this.rendererFactory.createRenderer(null, null);
-  // const host = renderer.selectRootElement(document.body, true);
-  // this.componentRef = this.cfRes
-  //   .resolveComponentFactory(HttpErrorWrapperComponent)
-  //   .create(this.injector);
-  // for (const key in instance) {
-  //   /* istanbul ignore else */
-  //   if (this.componentRef.instance.hasOwnProperty(key)) {
-  //     this.componentRef.instance[key] = instance[key];
-  //   }
-  // }
-  // this.componentRef.instance.hideCloseIcon = this.httpErrorConfig.errorScreen.hideCloseIcon;
-  // if (this.canCreateCustomError(instance.status as ErrorScreenErrorCodes)) {
-  //   this.componentRef.instance.cfRes = this.cfRes;
-  //   this.componentRef.instance.appRef = this.appRef;
-  //   this.componentRef.instance.injector = this.injector;
-  //   this.componentRef.instance.customComponent = this.httpErrorConfig.errorScreen.component;
-  // }
-  // this.appRef.attachView(this.componentRef.hostView);
-  // renderer.appendChild(host, (this.componentRef.hostView as EmbeddedViewRef<any>).rootNodes[0]);
-  // const destroy$ = new Subject<void>();
-  // this.componentRef.instance.destroy$ = destroy$;
-  // destroy$.subscribe(() => {
-  //   this.componentRef.destroy();
-  //   this.componentRef = null;
-  // });
-  // }
-
-  canCreateCustomError(status: ErrorScreenErrorCodes): boolean {
-    return snq(() => this.httpErrorConfig.errorScreen.component && this.httpErrorConfig.errorScreen.forWhichErrors.indexOf(status) > -1);
-  }
-
-  private filterRestErrors = ({ status }: HttpErrorResponse): boolean => {
-    if (typeof status !== 'number') {
-      return false;
-    }
-
-    return this.httpErrorConfig.skipHandledErrorCodes.findIndex((code) => code === status) < 0;
-  }
-
-  private filterRouteErrors = (instance: RouterError<any>): boolean => {
-    return (
-      snq(() => instance.event.error.indexOf('Cannot match') > -1) &&
-      this.httpErrorConfig.skipHandledErrorCodes.findIndex((code) => code === 404) < 0
     );
   }
 }

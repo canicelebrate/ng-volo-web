@@ -1,4 +1,4 @@
-import { IdentityModule } from '@abp/ng.identity';
+// import { IdentityModule } from '@abp/ng.identity';
 import { NgModule } from '@angular/core';
 import { SharedModule } from '@shared';
 import { UsersRoutingModule } from './users-routing.module';
@@ -8,11 +8,10 @@ import { UsersComponent } from './users/users.component';
 import { UsersViewComponent } from './users/view/view.component';
 
 const COMPONENTS = [UsersComponent];
-const COMPONENTS_NOROUNT = [UsersEditComponent, UsersViewComponent,
-  UsersCreateComponent];
+const COMPONENTS_NOROUNT = [UsersEditComponent, UsersViewComponent, UsersCreateComponent];
 
 @NgModule({
-  imports: [SharedModule, UsersRoutingModule, IdentityModule],
+  imports: [SharedModule, UsersRoutingModule],
   declarations: [...COMPONENTS, ...COMPONENTS_NOROUNT],
   entryComponents: COMPONENTS_NOROUNT,
 })

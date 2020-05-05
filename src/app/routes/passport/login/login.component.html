@@ -21,7 +21,7 @@
       <nz-form-item>
         <nz-form-control [nzErrorTip]="mobileErrorTip">
           <nz-input-group nzSize="large" nzPrefixIcon="user">
-            <input nz-input formControlName="mobile" placeholder="mobile number" />
+            <input nz-input formControlName="mobile" placeholder="{{ 'mobile number' | translate }}" />
           </nz-input-group>
           <ng-template #mobileErrorTip let-i>
             <ng-container *ngIf="i.errors.required">

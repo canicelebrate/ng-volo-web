@@ -1,0 +1,18 @@
+<ul class="account-language-switch-list text-center">
+  <li *ngFor="let language of languages">
+    <a
+      *ngIf="language.uiCultureName != currentLanguage"
+      href="javascript:void();"
+      title="{{ language.displayName }}"
+      (click)="changeLanguage(language.uiCultureName)"
+      ><i class="{{ language.flagIcon }}"></i
+    ></a>
+    <a
+      *ngIf="language.uiCultureName == currentLanguage"
+      href="javascript:void();"
+      title="{{ language.displayName }}"
+      (click)="changeLanguage(language.uiCultureName)"
+      ><i class="isDisabled {{ language.flagIcon }}"></i
+    ></a>
+  </li>
+</ul>

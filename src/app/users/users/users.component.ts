@@ -6,8 +6,9 @@ import { ModalHelper, _HttpClient } from '@delon/theme';
 import { PagedListingComponentBase } from '@shared';
 import { UsersEditComponent } from './edit/edit.component';
 
-import { Identity, IdentityState, IdentityStateService } from '@abp/ng.identity';
+import { Identity, IdentityState, IdentityStateService } from '@identity';
 import { Select, Store } from '@ngxs/store';
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { Observable, zip } from 'rxjs';
 import { finalize, pluck, switchMap, take } from 'rxjs/operators';
 import snq from 'snq';
@@ -40,7 +41,7 @@ export class UsersComponent extends PagedListingComponentBase<ABP.BasicItem> imp
     { title: '用户名', index: 'userName' },
     { title: '全名', index: 'name' },
     { title: '邮件', width: '50px', index: 'email' },
-    { title: '激活状态', type: 'yn', index: 'isDeleted', yn: { truth: false } },
+    { title: '已锁定', type: 'yn', index: 'isLockedOut' },
     {
       title: '操作',
       buttons: [
@@ -48,10 +49,12 @@ export class UsersComponent extends PagedListingComponentBase<ABP.BasicItem> imp
           text: '编辑',
           icon: 'edit',
           type: 'modal',
-          component: UsersEditComponent,
+          modal: {
+            component: UsersEditComponent,
+          },
           // paramsName: 'record',
           params: (record: STData) => {
-            return { i: record };
+            return { record };
           },
           click: (record, modal) => {
             // 在编辑页面，用户成功保持了数据
@@ -78,6 +81,7 @@ export class UsersComponent extends PagedListingComponentBase<ABP.BasicItem> imp
     private http: _HttpClient,
     private modal: ModalHelper,
     private identityStateService: IdentityStateService,
+    private message: NzMessageService,
   ) {
     super(injector);
   }
@@ -118,18 +122,13 @@ export class UsersComponent extends PagedListingComponentBase<ABP.BasicItem> imp
   }
 
   confirmDelete(record: STData, modal?: any, instance?: STComponent) {
-    // this.delete(record as UserDto);
+    this.identityStateService.dispatchDeleteUser(record.id).subscribe(() => {
+      this.message.create('success', '删除用户成功！');
+      this.refresh();
+    });
   }
 
-  delete(user: any): void {
-    // this._userService
-    //   .delete(user.id)
-    //   .pipe(finalize(() => {}))
-    //   .subscribe(() => {
-    //     abp.notify.info(`删除用户${user.name}成功!`);
-    //     this.refresh();
-    //   });
-  }
+  protected delete(entity: ABP.BasicItem) {}
 
   change(evt: STChange) {
     if (evt.type === 'pi') {

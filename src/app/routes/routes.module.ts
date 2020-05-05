@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 
+import { TranslateModule } from '@ngx-translate/core';
 import { SharedModule } from '@shared';
 // single pages
 import { CallbackComponent } from './callback/callback.component';
@@ -25,11 +26,8 @@ const COMPONENTS = [
 const COMPONENTS_NOROUNT = [];
 
 @NgModule({
-  imports: [ SharedModule, RouteRoutingModule ],
-  declarations: [
-    ...COMPONENTS,
-    ...COMPONENTS_NOROUNT
-  ],
-  entryComponents: COMPONENTS_NOROUNT
+  imports: [SharedModule, TranslateModule.forChild(), RouteRoutingModule],
+  declarations: [...COMPONENTS, ...COMPONENTS_NOROUNT],
+  entryComponents: COMPONENTS_NOROUNT,
 })
 export class RoutesModule {}
