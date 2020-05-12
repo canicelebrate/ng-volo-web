@@ -13,3 +13,6 @@ export * from './json-schema/json-schema.module';
 
 // Guard
 export * from './auth/auth-guard';
+
+// Settings
+export * from './models/setting-management';
