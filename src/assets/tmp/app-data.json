@@ -43,10 +43,16 @@
           ]
         },
         {
-          "text": "用户",
+          "text": "用户管理",
           "link": "/app/users",
           "icon": "anticon-user",
           "i18n": "menu.users"
+        },
+        {
+          "text": "角色管理",
+          "link": "/app/roles",
+          "icon": "anticon-tags",
+          "i18n": "menu.roles"
         },
         {
           "text": "快捷菜单",

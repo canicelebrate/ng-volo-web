@@ -1,13 +1,13 @@
 import { AfterViewInit, Component, Injector, OnInit, ViewChild } from '@angular/core';
 import { SFComponent, SFSchema, SFUISchema } from '@delon/form';
 import { _HttpClient } from '@delon/theme';
-import { Identity, IdentityState, IdentityStateService } from '@identity';
 import { createSelector, Select, Selector, Store } from '@ngxs/store';
 import { AppComponentBase } from '@shared/app-component-base';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { forkJoin, Observable, zip } from 'rxjs';
 import { finalize, take, takeLast } from 'rxjs/operators';
+import { Identity, IdentityState, IdentityStateService } from 'src/app/volo/identity';
 
 @Component({
   selector: 'app-users-users-edit',
@@ -48,7 +48,7 @@ export class UsersEditComponent extends AppComponentBase implements OnInit, Afte
     properties: {
       userName: { type: 'string', title: '用户名' },
       name: { type: 'string', title: '姓名', maxLength: 15 },
-      phoneNumber: { type: 'string', title: '电话', maxLength: 15 },
+      phoneNumber: { type: 'string', title: '电话', format: 'mobile', maxLength: 15 },
       email: { type: 'string', title: '邮箱', format: 'email' },
     },
     required: ['userName', 'name', 'phoneNumber', 'email'],

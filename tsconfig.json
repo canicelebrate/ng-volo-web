@@ -23,7 +23,10 @@
         "src/app/shared/"
       ],
       "@identity":[
-        "src/app/identity/index"
+        "src/app/volo/identity/index"
+      ],
+      "@permission-management":[
+        "src/app/volo/permission-management/index"
       ],
       "@core": [
         "src/app/core/index"

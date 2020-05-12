@@ -6,7 +6,7 @@ import { ModalHelper, _HttpClient } from '@delon/theme';
 import { PagedListingComponentBase } from '@shared';
 import { UsersEditComponent } from './edit/edit.component';
 
-import { Identity, IdentityState, IdentityStateService } from '@identity';
+import { Identity, IdentityState, IdentityStateService } from 'src/app/volo/identity';
 import { Select, Store } from '@ngxs/store';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Observable, zip } from 'rxjs';

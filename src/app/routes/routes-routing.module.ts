@@ -52,7 +52,10 @@ const routes: Routes = [
   {
     path: 'app',
     component: LayoutDefaultComponent,
-    children: [{ path: 'users', loadChildren: () => import('../users/users.module').then((m) => m.UsersModule) }],
+    children: [
+      { path: 'users', loadChildren: () => import('../users/users.module').then((m) => m.UsersModule) },
+      { path: 'roles', loadChildren: () => import('../roles/roles.module').then((m) => m.RolesModule) },
+    ],
   },
   // 单页不包裹Layout
   { path: 'callback/:type', component: CallbackComponent },

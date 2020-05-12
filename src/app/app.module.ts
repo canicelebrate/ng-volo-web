@@ -74,7 +74,8 @@ import { CoreModule as abpCoreModule } from '@abp/ng.core';
 // import { ErrorHandler } from '@abp/ng.theme.shared/lib/handlers/error.handler';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { NgxsModule } from '@ngxs/store';
-import { IdentityModule } from './identity/identity.module';
+import { IdentityModule } from './volo/identity/identity.module';
+import { PermissionManagementModule } from './volo/permission-management';
 
 const LOGGERS = [NgxsLoggerPluginModule.forRoot({ disabled: false })];
 
@@ -83,6 +84,7 @@ const GLOBAL_THIRD_MODULES = [
     environment,
   }),
   IdentityModule,
+  PermissionManagementModule,
   // ThemeSharedModule,
   NgxsModule.forRoot(),
 ];

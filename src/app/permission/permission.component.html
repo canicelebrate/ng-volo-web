@@ -1,0 +1,27 @@
+<div class="modal-header">
+  <div class="modal-title">{{title}} - 权限</div>
+</div>
+<nz-spin *ngIf="!i" class="modal-spin"></nz-spin>
+<div nz-row nzGutter="32">
+  <nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
+    <nz-tabset [nzTabPosition]="tabPosition" [nzType]="'line'" (nzSelectedIndexChange)="selectedGrpIndexChange($event)">
+      <nz-tab *ngFor="let grp of groups$ | async" [nzTitle]="grp.displayName">
+
+      </nz-tab>
+    </nz-tabset>
+  </nz-col>
+  <nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="16">
+    <nz-tree #permissionTree [nzData]="grpData" [nzCheckedKeys]="checkedKeys" [nzExpandedKeys]="expandedKeys"
+      nzVirtualHeight="300px" (nzExpandChange)="expandChange($event)" (nzCheckBoxChange)="checkBoxChange($event)"
+      nzCheckable nzMultiple>
+    </nz-tree>
+  </nz-col>
+</div>
+
+
+<div class="modal-footer">
+  <button nz-button type="button" (click)="close()">关闭</button>
+  <button nz-button type="submit" nzType="primary" (click)="save('any')" [nzLoading]="saving">
+    保存
+  </button>
+</div>
