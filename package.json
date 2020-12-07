@@ -20,7 +20,7 @@
   },
   "private": true,
   "dependencies": {
-    "@abp/ng.core": "^2.6.2",
+    "@abp/ng.core": "^3.0.1",
     "@angular/animations": "~9.1.1",
     "@angular/common": "~9.1.1",
     "@angular/compiler": "~9.1.1",
@@ -43,6 +43,7 @@
     "@ngxs/router-plugin": "^3.6.2",
     "@ngxs/storage-plugin": "^3.6.2",
     "@ngxs/store": "^3.6.2",
+    "angular-oauth2-oidc": "^9.2.2",
     "ajv": "^6.12.0",
     "famfamfam-flags": "^1.0.0",
     "ng-alain": "^9.0.0-rc.1",

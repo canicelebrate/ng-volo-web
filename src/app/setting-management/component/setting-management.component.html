@@ -1,0 +1,18 @@
+<page-header [action]="phActionTpl">
+  <ng-template #phActionTpl>
+
+  </ng-template>
+</page-header>
+<nz-card>
+  <nz-tabset *ngIf="hasSettings else empty">
+    <nz-tab *ngFor="let setting of settings" [nzTitle]="setting.name">
+      <ng-template nz-tab>
+        <ng-container *ngComponentOutlet="setting.component"></ng-container>
+      </ng-template>
+    </nz-tab>
+  </nz-tabset>
+
+  <ng-template #empty>
+    <nz-empty></nz-empty>
+  </ng-template>
+</nz-card>

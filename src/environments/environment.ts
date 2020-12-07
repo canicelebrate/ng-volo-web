@@ -16,7 +16,7 @@ export const environment = {
     logoUrl: '',
   },
   oAuthConfig: {
-    issuer: 'https://localhost:44327',
+    issuer: 'https://localhost:44375',
     clientId: 'BookStore_App',
     dummyClientSecret: '1q2w3e*',
     scope: 'BookStore',
@@ -26,7 +26,7 @@ export const environment = {
   },
   apis: {
     default: {
-      url: 'https://localhost:44327',
+      url: 'https://localhost:44375',
     },
   },
   localization: {

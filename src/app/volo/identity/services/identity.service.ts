@@ -1,6 +1,6 @@
-import { ABP, Rest, RestService } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { RestService, Rest, ABP } from '@abp/ng.core';
 import { Identity } from '../models/identity';
 
 @Injectable({
@@ -98,6 +98,15 @@ export class IdentityService {
     const request: Rest.Request<null> = {
       method: 'GET',
       url: `/api/identity/users/${id}/roles`,
+    };
+
+    return this.rest.request<null, Identity.RoleResponse>(request, { apiName: this.apiName });
+  }
+
+  getUserAssingableRoles(): Observable<Identity.RoleResponse> {
+    const request: Rest.Request<null> = {
+      method: 'GET',
+      url: '/api/identity/users/assignable-roles',
     };
 
     return this.rest.request<null, Identity.RoleResponse>(request, { apiName: this.apiName });

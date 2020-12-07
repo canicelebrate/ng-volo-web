@@ -9,10 +9,10 @@ import {
   GetRoleById,
   GetRoles,
   GetUserById,
-  GetUserRoles,
   GetUsers,
   UpdateRole,
   UpdateUser,
+  GetUserRoles,
 } from '../actions/identity.actions';
 import { Identity } from '../models/identity';
 import { IdentityState } from '../states/identity.state';

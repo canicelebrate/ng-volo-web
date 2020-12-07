@@ -55,6 +55,12 @@
           "i18n": "menu.roles"
         },
         {
+          "text": "设置管理",
+          "link": "/app/settings",
+          "icon": "anticon-setting",
+          "i18n": "menu.settings"
+        },
+        {
           "text": "快捷菜单",
           "i18n": "menu.shortcut",
           "icon": "anticon-rocket",

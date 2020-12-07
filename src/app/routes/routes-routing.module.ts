@@ -55,6 +55,10 @@ const routes: Routes = [
     children: [
       { path: 'users', loadChildren: () => import('../users/users.module').then((m) => m.UsersModule) },
       { path: 'roles', loadChildren: () => import('../roles/roles.module').then((m) => m.RolesModule) },
+      {
+        path: 'settings',
+        loadChildren: () => import('../setting-management/setting-management.module').then((m) => m.SettingManagementModule),
+      },
     ],
   },
   // 单页不包裹Layout

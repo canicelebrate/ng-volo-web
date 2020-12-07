@@ -77,6 +77,8 @@ import { NgxsModule } from '@ngxs/store';
 import { IdentityModule } from './volo/identity/identity.module';
 import { PermissionManagementModule } from './volo/permission-management';
 
+import { WeixinModule } from './weixin/weixin.module';
+
 const LOGGERS = [NgxsLoggerPluginModule.forRoot({ disabled: false })];
 
 const GLOBAL_THIRD_MODULES = [
@@ -85,6 +87,7 @@ const GLOBAL_THIRD_MODULES = [
   }),
   IdentityModule,
   PermissionManagementModule,
+  WeixinModule.forRoot(),
   // ThemeSharedModule,
   NgxsModule.forRoot(),
 ];
@@ -162,7 +165,7 @@ import { SharedModule } from './shared/shared.module';
     ...I18NSERVICE_PROVIDES,
     ...INTERCEPTOR_PROVIDES,
     ...APPINIT_PROVIDES,
-    ...GLOBAL_THIRD_PROVIDES,
+    // ...GLOBAL_THIRD_PROVIDES,
   ],
   bootstrap: [AppComponent],
 })

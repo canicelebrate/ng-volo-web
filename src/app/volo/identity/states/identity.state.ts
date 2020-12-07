@@ -1,6 +1,5 @@
-import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
-import { pluck, switchMap, tap } from 'rxjs/operators';
+import { switchMap, tap, pluck } from 'rxjs/operators';
 import {
   CreateRole,
   CreateUser,
@@ -9,13 +8,14 @@ import {
   GetRoleById,
   GetRoles,
   GetUserById,
-  GetUserRoles,
   GetUsers,
   UpdateRole,
   UpdateUser,
+  GetUserRoles,
 } from '../actions/identity.actions';
 import { Identity } from '../models/identity';
 import { IdentityService } from '../services/identity.service';
+import { Injectable } from '@angular/core';
 
 @State<Identity.State>({
   name: 'IdentityState',

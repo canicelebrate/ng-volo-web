@@ -1,5 +1,5 @@
-import { ABP } from '@abp/ng.core';
 import { Identity } from '../models/identity';
+import { ABP } from '@abp/ng.core';
 
 export class GetRoles {
   static readonly type = '[Identity] Get Roles';

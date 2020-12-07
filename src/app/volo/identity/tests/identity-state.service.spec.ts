@@ -1,8 +1,8 @@
 import { createServiceFactory, SpectatorService, SpyObject } from '@ngneat/spectator/jest';
-import { Store } from '@ngxs/store';
-import * as IdentityActions from '../actions/identity.actions';
 import { IdentityStateService } from '../services/identity-state.service';
 import { IdentityState } from '../states/identity.state';
+import { Store } from '@ngxs/store';
+import * as IdentityActions from '../actions/identity.actions';
 
 describe('IdentityStateService', () => {
   let service: IdentityStateService;
