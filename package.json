@@ -80,7 +80,7 @@
     "prettier": "^2.0.4",
     "prettier-stylelint": "^0.4.2",
     "protractor": "~5.4.3",
-    "stylelint": "^13.3.1",
+    "stylelint": "^15.10.1",
     "stylelint-config-prettier": "^8.0.1",
     "stylelint-config-rational-order": "^0.1.2",
     "stylelint-config-standard": "^20.0.0",
